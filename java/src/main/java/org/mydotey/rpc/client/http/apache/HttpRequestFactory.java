@@ -24,12 +24,12 @@ import org.mydotey.codec.Codec;
 /**
  * Created by Qiang Zhao on 10/05/2016.
  */
-public final class HttpRequestFactory {
+public interface HttpRequestFactory {
 
-    private static final List<String> ENTITY_ENCLOSING_REQUEST_METHODS = Collections
+    static final List<String> ENTITY_ENCLOSING_REQUEST_METHODS = Collections
             .unmodifiableList(Arrays.asList(HttpPost.METHOD_NAME, HttpPut.METHOD_NAME));
 
-    public static HttpEntityEnclosingRequestBase createRequest(String uri, String method, Object data, Codec codec) {
+    static HttpEntityEnclosingRequestBase createRequest(String uri, String method, Object data, Codec codec) {
         Objects.requireNonNull(method, "method is null");
         Objects.requireNonNull(data, "data is null");
         Objects.requireNonNull(codec, "codec is null");
@@ -50,7 +50,7 @@ public final class HttpRequestFactory {
         return request;
     }
 
-    public static HttpUriRequest createRequest(String uri, String method) {
+    static HttpUriRequest createRequest(String uri, String method) {
         Objects.requireNonNull(uri, "uri is null");
         Objects.requireNonNull(method, "method is null");
 
@@ -89,7 +89,7 @@ public final class HttpRequestFactory {
         return request;
     }
 
-    public static void gzipRequest(HttpEntityEnclosingRequest request) {
+    static void gzipRequest(HttpEntityEnclosingRequest request) {
         Objects.requireNonNull(request, "request is null");
         HttpEntity entity = request.getEntity();
         Objects.requireNonNull(entity, "entity is null");
@@ -99,10 +99,6 @@ public final class HttpRequestFactory {
         GzipCompressingEntity gzippedEntity = new GzipCompressingEntity(entity);
         request.setEntity(gzippedEntity);
         request.addHeader(gzippedEntity.getContentEncoding());
-    }
-
-    private HttpRequestFactory() {
-
     }
 
 }

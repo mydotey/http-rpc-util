@@ -1,9 +1,9 @@
-package org.mydotey.rpc.client.http.apache;
+package org.mydotey.rpc.client.http;
 
 /**
  * Created by Qiang Zhao on 10/05/2016.
  */
-public class HttpConnectException extends RuntimeException {
+public class HttpConnectException extends HttpRuntimeException {
 
     private static final long serialVersionUID = 1L;
 

@@ -5,15 +5,16 @@ import java.util.Objects;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
+import org.mydotey.rpc.client.http.HttpRequestException;
 
 /**
  * Created by Qiang Zhao on 10/05/2016.
  */
-public class HttpRequestException extends RuntimeException {
+public class ApacheHttpRequestException extends HttpRequestException {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,19 +24,19 @@ public class HttpRequestException extends RuntimeException {
     private Header[] _responseHeaders;
     private String _responseBody;
 
-    public HttpRequestException(String message) {
+    public ApacheHttpRequestException(String message) {
         super(message);
     }
 
-    public HttpRequestException(Throwable cause) {
+    public ApacheHttpRequestException(Throwable cause) {
         super(cause);
     }
 
-    public HttpRequestException(String message, Throwable cause) {
+    public ApacheHttpRequestException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public HttpRequestException(CloseableHttpResponse response) {
+    public ApacheHttpRequestException(HttpResponse response) {
         super(toErrorMessage(response));
 
         StatusLine statusLine = response.getStatusLine();
@@ -78,7 +79,7 @@ public class HttpRequestException extends RuntimeException {
         return _responseBody;
     }
 
-    private static String toErrorMessage(CloseableHttpResponse response) {
+    private static String toErrorMessage(HttpResponse response) {
         Objects.requireNonNull(response, "response is null");
 
         StatusLine statusLine = response.getStatusLine();

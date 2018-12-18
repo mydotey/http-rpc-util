@@ -11,13 +11,9 @@ import org.mydotey.rpc.client.http.apache.AlwaysRedirectStrategy;
 /**
  * Created by Qiang Zhao on 10/05/2016.
  */
-public class PoolingHttpClientFactory {
+public interface PoolingHttpClientFactory {
 
-    private PoolingHttpClientFactory() {
-        super();
-    }
-
-    public static CloseableHttpClient create(RequestConfig config, HttpRequestRetryHandler retryHandler,
+    static CloseableHttpClient create(RequestConfig config, HttpRequestRetryHandler retryHandler,
             HttpClientConnectionManager connectionManager) {
         HttpClientBuilder builder = HttpClientBuilder.create();
         builder.useSystemProperties().setRedirectStrategy(AlwaysRedirectStrategy.DEFAULT)

@@ -7,7 +7,9 @@ import java.util.concurrent.ExecutionException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mydotey.rpc.client.http.HelloApp;
 import org.mydotey.rpc.client.http.HelloRequest;
 import org.mydotey.rpc.client.http.HelloResponse;
@@ -26,6 +28,9 @@ public class ApacheHttpRpcClientTest {
 
     private HelloApp _app;
     private TestApacheHttpRpcClient _client;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     protected int getServerPort() {
         return 8085;
@@ -61,6 +66,17 @@ public class ApacheHttpRpcClientTest {
     }
 
     @Test
+    public void testHello2() {
+        expectedException.expect(ApacheHttpRequestException.class);
+
+        HelloRequest request = new HelloRequest();
+        request.setHello("Hello!");
+        HelloResponse response = _client.invoke("hello2", request, HelloResponse.class);
+        System.out.println(response);
+        Assert.assertEquals(request.getHello(), response.getData());
+    }
+
+    @Test
     public void testHelloAsync() throws InterruptedException, ExecutionException {
         HelloRequest request = new HelloRequest();
         request.setHello("Hello!");
@@ -68,6 +84,22 @@ public class ApacheHttpRpcClientTest {
         HelloResponse response = future.get();
         System.out.println(response);
         Assert.assertEquals(request.getHello(), response.getData());
+    }
+
+    @Test
+    public void testHelloAsync2() throws Throwable {
+        expectedException.expect(ApacheHttpRequestException.class);
+
+        HelloRequest request = new HelloRequest();
+        request.setHello("Hello!");
+        CompletableFuture<HelloResponse> future = _client.invokeAsync("hello2", request, HelloResponse.class);
+        try {
+            HelloResponse response = future.get();
+            System.out.println(response);
+            Assert.assertEquals(request.getHello(), response.getData());
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
     }
 
 }
