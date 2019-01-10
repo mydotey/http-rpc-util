@@ -55,7 +55,7 @@ public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeab
         _defaultConfig = newDefaultConfig();
         PropertyConfig<String, DynamicPoolingHttpClientProviderConfig> propertyConfig = ConfigurationProperties
                 .<String, DynamicPoolingHttpClientProviderConfig> newConfigBuilder()
-                .setKey(_client + ".default-request-config").setValueType(DynamicPoolingHttpClientProviderConfig.class)
+                .setKey(_clientId + ".default-request-config").setValueType(DynamicPoolingHttpClientProviderConfig.class)
                 .setDefaultValue(_defaultConfig).setValueFilter(this::filterConfig).build();
         _config = configurationManager.getProperty(propertyConfig);
         _config.addChangeListener(this::updateClient);
