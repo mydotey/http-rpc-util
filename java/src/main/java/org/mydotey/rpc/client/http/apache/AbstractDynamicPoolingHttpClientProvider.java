@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.function.Supplier;
 
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.config.RequestConfig;
@@ -21,7 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Qiang Zhao on 10/05/2016.
  */
-public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeable> implements Closeable {
+public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeable> implements Supplier<T>, Closeable {
 
     private static final Logger _logger = LoggerFactory.getLogger(AbstractDynamicPoolingHttpClientProvider.class);
 
@@ -55,8 +56,9 @@ public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeab
         _defaultConfig = newDefaultConfig();
         PropertyConfig<String, DynamicPoolingHttpClientProviderConfig> propertyConfig = ConfigurationProperties
                 .<String, DynamicPoolingHttpClientProviderConfig> newConfigBuilder()
-                .setKey(_clientId + ".default-request-config").setValueType(DynamicPoolingHttpClientProviderConfig.class)
-                .setDefaultValue(_defaultConfig).setValueFilter(this::filterConfig).build();
+                .setKey(_clientId + ".default-request-config")
+                .setValueType(DynamicPoolingHttpClientProviderConfig.class).setDefaultValue(_defaultConfig)
+                .setValueFilter(this::filterConfig).build();
         _config = configurationManager.getProperty(propertyConfig);
         _config.addChangeListener(this::updateClient);
 
