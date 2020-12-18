@@ -5,7 +5,7 @@
 
     <groupId>org.mydotey.rpc</groupId>
     <artifactId>http-rpc-util</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
     <name>http-rpc-util</name>
     <description>http rpc util</description>
@@ -43,7 +43,7 @@
         <source.encoding>UTF-8</source.encoding>
         <rpc-util.version>1.1.0</rpc-util.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <scf-bom.version>1.5.2</scf-bom.version>
+        <scf-bom.version>1.6.3</scf-bom.version>
         <httpcore.version>4.4.10</httpcore.version>
         <httpclient.version>4.5.6</httpclient.version>
         <httpasyncclient.version>4.1.4</httpasyncclient.version>

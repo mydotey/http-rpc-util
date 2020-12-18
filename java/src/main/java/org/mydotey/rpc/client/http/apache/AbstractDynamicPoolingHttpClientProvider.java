@@ -16,6 +16,7 @@ import org.mydotey.scf.Property;
 import org.mydotey.scf.PropertyChangeEvent;
 import org.mydotey.scf.PropertyConfig;
 import org.mydotey.scf.facade.ConfigurationProperties;
+import org.mydotey.scf.filter.AbstractValueFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,10 +56,10 @@ public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeab
 
         _defaultConfig = newDefaultConfig();
         PropertyConfig<String, DynamicPoolingHttpClientProviderConfig> propertyConfig = ConfigurationProperties
-                .<String, DynamicPoolingHttpClientProviderConfig> newConfigBuilder()
-                .setKey(_clientId + ".default-request-config")
-                .setValueType(DynamicPoolingHttpClientProviderConfig.class).setDefaultValue(_defaultConfig)
-                .setValueFilter(this::filterConfig).build();
+            .<String, DynamicPoolingHttpClientProviderConfig>newConfigBuilder()
+            .setKey(_clientId + ".default-request-config")
+            .setValueType(DynamicPoolingHttpClientProviderConfig.class).setDefaultValue(_defaultConfig)
+            .setValueFilter(new ProviderConfigValueFilter()).build();
         _config = configurationManager.getProperty(propertyConfig);
         _config.addChangeListener(this::updateClient);
 
@@ -182,6 +183,28 @@ public abstract class AbstractDynamicPoolingHttpClientProvider<T extends Closeab
                 _logger.error("Close old httpclient failed: " + _clientId, ex);
             }
         });
+    }
+
+    protected class ProviderConfigValueFilter extends AbstractValueFilter<DynamicPoolingHttpClientProviderConfig> {
+
+        private AbstractDynamicPoolingHttpClientProvider<T> _provider = AbstractDynamicPoolingHttpClientProvider.this;
+
+        @Override
+        public DynamicPoolingHttpClientProviderConfig apply(DynamicPoolingHttpClientProviderConfig config) {
+            return filterConfig(config);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null || this.getClass() != obj.getClass())
+                return false;
+
+            ProviderConfigValueFilter other = (ProviderConfigValueFilter) obj;
+            return _provider.getClass() == other._provider.getClass() &&
+                Objects.equals(_provider._defaultConfig, other._provider._defaultConfig);
+        }
+
     }
 
 }

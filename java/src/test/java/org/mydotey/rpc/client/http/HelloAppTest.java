@@ -3,7 +3,6 @@ package org.mydotey.rpc.client.http;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.mydotey.rpc.client.http.HelloApp;
 
 /**
  * @author koqizhao

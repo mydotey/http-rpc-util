@@ -16,7 +16,7 @@ import org.mydotey.rpc.client.http.HelloResponse;
 import org.mydotey.scf.ConfigurationManager;
 import org.mydotey.scf.ConfigurationManagerConfig;
 import org.mydotey.scf.facade.ConfigurationManagers;
-import org.mydotey.scf.facade.StringPropertySources;
+import org.mydotey.scf.facade.SimpleConfigurationSources;
 import org.mydotey.scf.source.stringproperty.memorymap.MemoryMapConfigurationSource;
 
 /**
@@ -42,10 +42,10 @@ public class ApacheHttpRpcClientTest {
         _app.start();
 
         String serviceId = "hello-app";
-        MemoryMapConfigurationSource configurationSource = StringPropertySources.newMemoryMapSource("memory-map");
+        MemoryMapConfigurationSource configurationSource = SimpleConfigurationSources.newMemoryMapSource("memory-map");
         configurationSource.setPropertyValue(serviceId + ".service.url", "http://localhost:" + getServerPort());
         ConfigurationManagerConfig managerConfig = ConfigurationManagers.newConfigBuilder()
-                .setName("ApacheHttpRpcClientTest").addSource(1, configurationSource).build();
+            .setName("ApacheHttpRpcClientTest").addSource(1, configurationSource).build();
         ConfigurationManager configurationManager = ConfigurationManagers.newManager(managerConfig);
         _client = new TestApacheHttpRpcClient(serviceId, configurationManager);
     }
